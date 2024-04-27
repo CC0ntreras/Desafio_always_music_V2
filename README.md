@@ -10,11 +10,11 @@ esto no sea así.
 En este desafío deberás ocupar la clase Pool definiendo sus diferentes propiedades, capturar
 los posibles errores en el proceso de conexión con la base de datos y realizar las siguientes
 consultas usando textos parametrizados.
-● Agregar un nuevo estudiante.
-● Consultar los estudiantes registrados.
-● Consultar estudiante por rut.
-● Actualizar la información de un estudiante.
-● Eliminar el registro de un estudiante.
+- Agregar un nuevo estudiante.
+- Consultar los estudiantes registrados.
+- Consultar estudiante por rut.
+- Actualizar la información de un estudiante.
+- Eliminar el registro de un estudiante.
 ## Visuales
 ![1](https://github.com/CC0ntreras/Desafio_always_music_V2/assets/50925916/8d9bc202-3b7a-4994-a380-1572a3fbe428)
 
