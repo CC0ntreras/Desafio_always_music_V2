@@ -32,6 +32,7 @@ async function nuevo(params) {
     }
 }
 
+
 // Función para consultar todos los estudiantes
 async function consulta() {
     try {
