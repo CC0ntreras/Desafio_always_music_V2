@@ -10,6 +10,15 @@ async function nuevo(params) {
     
     const {nombre, rut, curso, nivel} = params;
     try {
+        //Coonsulta en la base de datos si ya esta ese rut
+        const existeEstudiante = await pool.query('SELECT COUNT(*) FROM registro_actual WHERE rut = $1', [rut]);
+
+        // Si ya existe ese RUT, mostrar un error
+        if (existeEstudiante.rows[0].count > 0) {
+            console.error('Error: El estudiante con el RUT', rut, 'ya existe.');
+            return; 
+        }
+
         const res = await pool.query('INSERT INTO registro_actual (nombre, rut, curso, nivel) VALUES ($1, $2, $3, $4)', [nombre, rut, curso, nivel]);
         console.log(`Estudiante ${nombre} agregado con éxito`);
     } catch (err) {
@@ -26,6 +35,7 @@ async function nuevo(params) {
 // Función para consultar todos los estudiantes
 async function consulta() {
     try {
+
         const res = await pool.query('SELECT * FROM registro_actual');
         if (res.rows.length === 0) {
             console.log("La tabla está vacía.");
@@ -54,7 +64,7 @@ async function consultarPorRut(params) {
 // Función para actualizar los datos de un estudiante
 async function editar(params) {
     const {nombre, rut, curso, nivel} = params;
-    console.log({nombre, rut, curso, nivel})
+    //console.log({nombre, rut, curso, nivel})
     try {
         const res = await pool.query('UPDATE registro_actual SET nombre = $1, curso = $2, nivel = $3 WHERE rut = $4', [nombre, curso, nivel, rut]);
         if (res.rowCount === 0) {
@@ -73,7 +83,7 @@ async function editar(params) {
 // Función para eliminar un estudiante
 async function eliminar(params) {
     const {rut} = params;
-    console.log(rut)
+    //console.log(rut)
     try {
         const res = await pool.query(`DELETE FROM registro_actual WHERE rut = $1`, [rut]);
        if (res.rowCount === 0) {
@@ -109,3 +119,15 @@ switch(comando) {
     default:
         console.log('Comando no reconocido');
 }
+
+/* EJECUTAR EN TERMINAL GIT BASH YA QUE CON POWERSHELL HAY ERRORES Y SOLO LA CONSULTA SE MUESTRA
+node index.js nuevo '{"nombre":"Juan Perez","rut":"12345678-9","curso":"Matemáticas","nivel":"100"}'
+
+node index.js consulta
+
+node index.js rut '{"rut":"12345678-9"}'
+
+node index.js editar '{"nombre":"Juan Perez","rut":"12345678-9","curso":"Historia","nivel":"200"}'
+
+node index.js eliminar '{"rut":"12345678-9"}'
+*/
