@@ -50,13 +50,18 @@ async function consulta() {
 }
 
 // Función para consultar estudiante por RUT
+
 async function consultarPorRut(params) {
     try {
         const res = await pool.query('SELECT * FROM registro_actual WHERE rut = $1', [params[1]]);
-        console.log(res.rows);
+        if (res.rows.length === 0) {
+            console.log("No se encontraron registros con ese RUT.");
+        } else {
+            console.log(res.rows);
+        }
     } catch (err) {
         console.error(err);
-    }finally {
+    } finally {
         await pool.end();
     }
 }
@@ -66,7 +71,7 @@ async function editar(params) {
     const {nombre, rut, curso, nivel} = params;
     //console.log({nombre, rut, curso, nivel})
     try {
-        const res = await pool.query('UPDATE registro_actual SET nombre = $1, curso = $2, nivel = $3 WHERE rut = $4', [nombre, curso, nivel, rut]);
+        const res = await pool.query('UPDATE registro_actual SET nombre = $1, curso = $2, nivel = $3 WHERE rut = $4 RETURNING *', [nombre, curso, nivel, rut]);
         if (res.rowCount === 0) {
             console.log(`No se encontró un estudiante con el RUT ${rut} para actualizar.`);
         } else {
